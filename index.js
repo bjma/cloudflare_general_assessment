@@ -64,7 +64,7 @@ async function handleHTMLRequest(request, html) {
         }})
         .on("div#social", socialHandler)                   // Then add our socials with links and icons
         .on("title", {element: (element) => {              // Change title content
-            element.setInnerContent("Brian Ma's LinkTree");
+            element.setInnerContent("Brian Ma");
         }})
         .on("body", {element: (element) => {               // Change background color
             element.setAttribute("class", "bg-teal-400");
