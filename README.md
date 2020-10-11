@@ -1,15 +1,15 @@
-# 👷 `worker-template` Hello World
+# 👷 Cloudflare General Engineering Assignment
+Take-home assignment for Cloudflare's 2021 SWE Internship. 
 
-A template for kick starting a Cloudflare worker project.
-
-[`index.js`](https://github.com/cloudflare/worker-template/blob/master/index.js) is the content of the Workers script.
-
-#### Wrangler
-
-To generate using [wrangler](https://github.com/cloudflare/wrangler)
-
+## Installation
+Install the `wrangler` CLI using `npm`:
 ```
-wrangler generate projectname https://github.com/cloudflare/worker-template
+npm i @cloudflare/wrangler -g
 ```
 
-Further documentation for Wrangler can be found [here](https://developers.cloudflare.com/workers/tooling/wrangler).
+Then, run the project in your local environment from your project directory:
+```
+wrangler dev
+```
+
+To view, go to `https://localhost/8787`.
