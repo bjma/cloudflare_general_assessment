@@ -1,8 +1,7 @@
 // LinkTree data; global so we can access from either endpoint
 const data = [
-    {name: "LinkedIn", url: "https://www.linkedin.com/in/brian-j-ma/"},
-    {name: "GitHub", url: "https://github.com/bjma/"},
-    {name: "Reddit", url: "https://www.reddit.com/"},
+    {name: "Cloudflare Worker's API", url: "https://developers.cloudflare.com/workers/"},
+    {name: "HTMLRewriter", url: "https://developers.cloudflare.com/workers/runtime-apis/html-rewriter"},
 ];
 
 addEventListener('fetch', event => {
@@ -44,19 +43,31 @@ async function handleLinkRequest(request) {
 async function handleHTMLRequest(request, html) {
     try {
         // Get links as LinkHandler
-        const links = new LinkHandler(data);
+        const linkHandler = new LinkHandler(data);
         // Rewrite HTML content
         const rewriter = new HTMLRewriter()
-            .on('div#links', links) // Add links to our HTML page
-            .on('div#profile', {element: (element) => { // Remove 'display: none' from 'div#profile' 
-                element.removeAttribute("style"); // Update element object by removing selected attribute
+            .on("div#links", linkHandler)                  // Add links to our HTML page
+            .on("div#profile", {element: (element) => {    // Remove 'display: none' from 'div#profile' 
+                element.removeAttribute("style");          // Update element object by removing selected attribute
             }})
-            .on('img#avatar', {element: (element) => { // Add avatar to 'img#avatar' in 'div#profile'
+            .on("img#avatar", {element: (element) => {     // Add avatar to 'img#avatar' in 'div#profile'
                 element.setAttribute("src", "https://avatars1.githubusercontent.com/u/26337572?s=400&u=f5f7637acc46ae0139fac1014fad3a1cb23ce9ad&v=4");
             }})
-            .on('h1#name', {element: (element) => { // Add name to 'h1#name'
+            .on("h1#name", {element: (element) => {        // Add name to 'h1#name'
                 element.setInnerContent("Brian Ma");
             }});
+        // Extra Credit
+        const socialHandler = new SocialHandler();
+        rewriter.on("div#social", {element: (element) => { // Remove 'display:none' from 'div#social'
+            element.removeAttribute("style");
+        }})
+        .on("div#social", socialHandler)                   // Then add our socials with links and icons
+        .on("title", {element: (element) => {              // Change title content
+            element.setInnerContent("Brian Ma's LinkTree");
+        }})
+        .on("body", {element: (element) => {               // Change background color
+            element.setAttribute("class", "bg-teal-400");
+        }});
         // Add header to ensure correct content type, and return transformed HTML
         rewriter.headers = {"Content-Type": "text/html;charset=UTF-8"};
         return rewriter.transform(html);
@@ -82,5 +93,24 @@ class LinkHandler {
     // Testing our LinkHandler class
     async printLinks() {
         this.links.forEach((link) => console.log(link));
+    }
+}
+
+class SocialHandler {
+    // Have array of social links local to the SocialHandler scope since it doesn't need to be globally accessed, unlike our links
+    constructor() {
+        this.socials = [
+            {url: "https://www.linkedin.com/in/brian-j-ma/", icon: "https://simpleicons.org/icons/linkedin.svg"},
+            {url: "https://github.com/bjma/", icon: "https://simpleicons.org/icons/github.svg"},
+        ]
+    }
+    async element(element) {
+        this.socials.forEach((social) => {
+            element.append(`<a href="${social.url}><svg width="90" height="90"><image xlink:href="${social.icon}" width="90" height="90"/></svg></a>`, {html:true});
+        })
+    }
+    // Testing SocialHandler class
+    async printSocials() {
+        this.socials.forEach((social) => console.log(social));
     }
 }
