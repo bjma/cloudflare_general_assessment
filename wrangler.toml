@@ -1,6 +1,6 @@
 name = "cloudflare_general_assessment"
 type = "javascript"
-account_id = ""
+account_id = "a793417f322272deb2195f72b447690a"
 workers_dev = true
 route = ""
 zone_id = ""
