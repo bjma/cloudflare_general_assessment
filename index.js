@@ -91,7 +91,7 @@ class LinkHandler {
         return element;
     }
     // Testing our LinkHandler class
-    async printLinks() {
+    printLinks() {
         this.links.forEach((link) => console.log(link));
     }
 }
@@ -106,11 +106,11 @@ class SocialHandler {
     }
     async element(element) {
         this.socials.forEach((social) => {
-            element.append(`<a href="${social.url}><svg width="90" height="90"><image xlink:href="${social.icon}" width="90" height="90"/></svg></a>`, {html:true});
+            element.append(`<a href="${social.url}><svg width="90" height="90"><image src="${social.icon}" width="90" height="90"/></svg></a>`, {html:true});
         })
     }
     // Testing SocialHandler class
-    async printSocials() {
+    printSocials() {
         this.socials.forEach((social) => console.log(social));
     }
 }
