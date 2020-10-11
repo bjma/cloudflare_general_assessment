@@ -1,7 +1,8 @@
 // LinkTree data; global so we can access from either endpoint
 const data = [
-    {name: "Cloudflare Worker's API", url: "https://developers.cloudflare.com/workers/"},
-    {name: "HTMLRewriter", url: "https://developers.cloudflare.com/workers/runtime-apis/html-rewriter"},
+    {name: "Budgit (personal project currently in development)", url: "https://github.com/bjma/budgit"},
+    {name: "Algorithm Design Notes (self-authored and distributed for free)", url: "https://github.com/bjma/algorithms"},
+    {name: "Tune into my cooking journey on Instagram!", url: "https://www.instagram.com/freshjingjer/"},
 ];
 
 addEventListener('fetch', event => {
@@ -76,13 +77,12 @@ async function handleHTMLRequest(request, html) {
     }
 }
 
+// Handles links for LinkTree to be used for HTMLRewrite
 class LinkHandler {
     constructor(links) {
         this.links = links;
     }
-    /**
-     * Creates the element that we're going to add into the HTML static page
-     */
+    // Creates the element that we're going to add into the HTML static page
     async element(element) {
         this.links.forEach((link) => {
             // Append each link as an HTML <a> tag 
@@ -96,17 +96,20 @@ class LinkHandler {
     }
 }
 
+// Handles social links to be used for HTMLRewrite
 class SocialHandler {
     // Have array of social links local to the SocialHandler scope since it doesn't need to be globally accessed, unlike our links
     constructor() {
         this.socials = [
             {url: "https://www.linkedin.com/in/brian-j-ma/", icon: "https://simpleicons.org/icons/linkedin.svg"},
             {url: "https://github.com/bjma/", icon: "https://simpleicons.org/icons/github.svg"},
+            {url: "https://www.instagram.com/freshjingjer", icon: "https://simpleicons.org/icons/instagram.svg"}
         ]
     }
     async element(element) {
+        const ICON_SIZE = 36;
         this.socials.forEach((social) => {
-            element.append(`<a href="${social.url}><svg width="90" height="90"><image src="${social.icon}" width="90" height="90"/></svg></a>`, {html:true});
+            element.append(`<a href="${social.url}"><svg width="${ICON_SIZE}" height="${ICON_SIZE}"><image width="${ICON_SIZE}" height="${ICON_SIZE}" xlink:href="${social.icon}"/></svg></a>`, {html:true});
         })
     }
     // Testing SocialHandler class
